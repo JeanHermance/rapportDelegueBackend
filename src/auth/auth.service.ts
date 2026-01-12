@@ -11,6 +11,7 @@ import { ConnexionDto } from './dto/connexion.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MotDePasseOublieDto } from './dto/mot-de-passe-oublier.dto';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 @Injectable()
 export class AuthService {
@@ -18,11 +19,14 @@ export class AuthService {
     @InjectRepository(Auth)
     private readonly authRepository: Repository<Auth>,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly cloudinaryService: CloudinaryService,
   ) { }
   async inscription(createAuthDto: CreateAuthDto, photo: Express.Multer.File) {
     try {
-      createAuthDto.photo = `uploads/${photo.filename}`;
+      const upload = await this.cloudinaryService.uploadImage(photo);
+
+      createAuthDto.photo = upload.url;
 
       if (createAuthDto.motDePasse != createAuthDto.confirmationMotDePasse) {
         throw new Error("Les mots de passe ne correspondent pas");
