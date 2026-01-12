@@ -10,7 +10,7 @@ import { Auth } from './entities/auth.entity';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { RolesGuard } from './guard/roles.guard';
 import { Roles } from './decorator/role.decorator';
-import { Role } from 'enum/role.enum';
+import { Role } from 'src/enum/role.enum';
 
 @Controller('auth')
 export class AuthController {

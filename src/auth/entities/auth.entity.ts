@@ -1,5 +1,5 @@
-import { Role } from "enum/role.enum";
-import { StatutUtilisateur } from "enum/statututilisateur.enum";
+import { Role } from "src/enum/role.enum";
+import { StatutUtilisateur } from "src/enum/statututilisateur.enum";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('utilisateur')
