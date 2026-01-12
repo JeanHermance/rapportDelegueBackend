@@ -1,5 +1,5 @@
-import { Role } from "src/enum/role.enum";
-import { StatutUtilisateur } from "src/enum/statututilisateur.enum";
+import { Role } from "../../enum/role.enum";
+import { StatutUtilisateur } from "../../enum/statututilisateur.enum";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('utilisateur')
@@ -19,22 +19,22 @@ export class Auth {
     @Column()
     motDePasse: string;
 
-    @Column({unique: true})
+    @Column({ unique: true })
     telephone: string;
 
     @Column()
     adresse: string;
 
-    @Column({unique: true})
+    @Column({ unique: true })
     cin: string;
 
     @Column()
     sexe: string;
 
-    @Column({type: 'date'})
+    @Column({ type: 'date' })
     dateNaissance: Date;
 
-    @Column({type: 'varchar'})
+    @Column({ type: 'varchar' })
     photo: string;
 
     @Column({ type: 'enum', enum: Role, default: Role.USER })
@@ -43,16 +43,16 @@ export class Auth {
     @Column({ type: 'enum', enum: StatutUtilisateur, default: StatutUtilisateur.ACTIF })
     statutUtilisateur: StatutUtilisateur;
 
-    @Column({type: 'text',nullable: true})
+    @Column({ type: 'text', nullable: true })
     accessToken: string | null;
 
-    @Column({type: 'text',nullable: true})
+    @Column({ type: 'text', nullable: true })
     refreshToken: string | null;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP',onUpdate: 'CURRENT_TIMESTAMP' })
+    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
 }

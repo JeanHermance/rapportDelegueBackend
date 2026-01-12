@@ -10,7 +10,7 @@ import { Auth } from './entities/auth.entity';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { RolesGuard } from './guard/roles.guard';
 import { Roles } from './decorator/role.decorator';
-import { Role } from 'src/enum/role.enum';
+import { Role } from '../enum/role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -26,7 +26,7 @@ export class AuthController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard,RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: "Liste des utilisateurs" })
