@@ -31,6 +31,12 @@ async function bootstrap() {
       persistAuthorization: true,
       customSiteTitle: 'Service des Delegué API',
     },
+    customCssUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js',
+    ],
   });
 
   app.getHttpAdapter().get('/servicedelegue/doc-json', (req: any, res: any) => {
