@@ -37,7 +37,22 @@ async function bootstrap() {
     res.json(document)
   })
 
-  const port = process.env.PORT ?? 3000;
-  await app.listen(port);
+  // Only call listen if not running as a serverless function
+  if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    const port = process.env.PORT ?? 3000;
+    await app.listen(port);
+  }
+
+  await app.init();
+  return app.getHttpAdapter().getInstance();
 }
-bootstrap();
+
+// Export the bootstrap function as the handler for Vercel
+let cachedHandler: any;
+
+export default async (req: any, res: any) => {
+  if (!cachedHandler) {
+    cachedHandler = await bootstrap();
+  }
+  return cachedHandler(req, res);
+};
