@@ -37,6 +37,11 @@ async function bootstrap() {
     res.json(document)
   })
 
+  // Redirect root to Swagger
+  app.getHttpAdapter().get('/', (req: any, res: any) => {
+    res.redirect('/servicedelegue/api');
+  });
+
   // Only call listen if not running as a serverless function
   if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     const port = process.env.PORT ?? 3000;
