@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { CommuneModule } from './commune/commune.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { AuthModule } from './auth/auth.module';
       }),
       inject: [ConfigService],
     }),
-    AuthModule
+    AuthModule,
+    CommuneModule
   ],
   controllers: [AppController],
   providers: [AppService],

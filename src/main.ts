@@ -67,3 +67,8 @@ export default async (req: any, res: any) => {
   }
   return cachedHandler(req, res);
 };
+
+// Start the server if not running on Vercel
+if (!process.env.VERCEL) {
+  bootstrap();
+}
