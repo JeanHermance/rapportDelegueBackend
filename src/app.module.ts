@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CommuneModule } from './commune/commune.module';
+import { FokotanyModule } from './fokotany/fokotany.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { CommuneModule } from './commune/commune.module';
       inject: [ConfigService],
     }),
     AuthModule,
-    CommuneModule
+    CommuneModule,
+    FokotanyModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -49,7 +49,8 @@ export class CommuneService {
             { nomCommune: Like(`%${search}%`) },
             { codeCommune: Like(`%${search}%`) },
             { emailCommune: Like(`%${search}%`) },
-          ]
+          ],
+          relations: ['fokotanys']
         });
         return {
           message: "Liste des communes",
@@ -66,7 +67,9 @@ export class CommuneService {
         const [listeCommunes, count] = await this.communeRepository.findAndCount({
           take: limit,
           skip: (page - 1) * limit,
+          relations: ['fokotanys']
         });
+
         return {
           message: "Liste des communes",
           data: listeCommunes,
@@ -86,7 +89,7 @@ export class CommuneService {
 
   async editerCommune(id: string) {
     try {
-      const commune = await this.communeRepository.findOne({ where: { idCommune: id } });
+      const commune = await this.communeRepository.findOne({ where: { idCommune: id }, relations: ['fokotanys'] });
       if (!commune) {
         throw new Error('Commune non trouvée');
       }

@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Fokotany } from "src/fokotany/entities/fokotany.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('Commune')
 export class Commune {
     @PrimaryGeneratedColumn('uuid')
     idCommune: string;
@@ -8,7 +9,7 @@ export class Commune {
     @Column({unique: true})
     nomCommune: string;
 
-    @Column()
+    @Column({nullable: true})
     descriptionCommune: string;
 
     @Column({unique: true})
@@ -31,4 +32,7 @@ export class Commune {
 
     @UpdateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP',onUpdate: 'CURRENT_TIMESTAMP'})
     updatedAt: Date;
+
+    @OneToMany(() => Fokotany, (fokotany) => fokotany.commune)
+    fokotanys: Fokotany[];
 }

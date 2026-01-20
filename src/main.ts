@@ -11,7 +11,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix('servicedelegue');
 
-  app.enableCors();
+  app.enableCors(
+    {
+      origin: "*",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      credentials: true,
+    }
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Service des Delegué API')
