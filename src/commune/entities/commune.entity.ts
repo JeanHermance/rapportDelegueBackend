@@ -1,3 +1,4 @@
+import { DelegueCommune } from "src/delegue-commune/entities/delegue-commune.entity";
 import { Fokotany } from "src/fokotany/entities/fokotany.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -35,4 +36,7 @@ export class Commune {
 
     @OneToMany(() => Fokotany, (fokotany) => fokotany.commune)
     fokotanys: Fokotany[];
+
+    @OneToMany(()=> DelegueCommune, (delegueCommune)=> delegueCommune.commune)
+    delegueCommunes: DelegueCommune[];
 }

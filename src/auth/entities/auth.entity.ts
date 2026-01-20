@@ -1,6 +1,7 @@
+import { DelegueCommune } from "src/delegue-commune/entities/delegue-commune.entity";
 import { Role } from "../../enum/role.enum";
 import { StatutUtilisateur } from "../../enum/statututilisateur.enum";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('utilisateur')
 export class Auth {
@@ -54,5 +55,8 @@ export class Auth {
 
     @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
+
+    @OneToMany(()=> DelegueCommune, (delegueCommune)=> delegueCommune.utilisateur)
+    delegueCommunes: DelegueCommune[];
 
 }

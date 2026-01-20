@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { FokotanyService } from './fokotany.service';
 import { CreateFokotanyDto } from './dto/create-fokotany.dto';
 import { UpdateFokotanyDto } from './dto/update-fokotany.dto';
-import { ApiBadRequestResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('fokotany')
 export class FokotanyController {
@@ -18,8 +18,11 @@ export class FokotanyController {
   @Get()
   @ApiOperation({summary: 'Liste des fokotany'})
   @ApiBadRequestResponse({description: "Erreur lors de la liste des fokotany"})
-  findAll() {
-    return this.fokotanyService.listFokotany();
+  @ApiQuery({name: 'limit', required: false, type: Number})
+  @ApiQuery({name: 'page', required: false, type: Number})
+  @ApiQuery({name: 'search', required: false, type: String})
+  findAll(@Query('limit') limit: number, @Query('page') page: number, @Query('search') search: string) {
+    return this.fokotanyService.listFokotany(limit, page, search);
   }
 
   @Get(':id')

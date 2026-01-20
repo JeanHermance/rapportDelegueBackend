@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CommuneModule } from './commune/commune.module';
 import { FokotanyModule } from './fokotany/fokotany.module';
+import { DelegueCommuneModule } from './delegue-commune/delegue-commune.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { FokotanyModule } from './fokotany/fokotany.module';
     }),
     AuthModule,
     CommuneModule,
-    FokotanyModule
+    FokotanyModule,
+    DelegueCommuneModule,
   ],
   controllers: [AppController],
   providers: [AppService],

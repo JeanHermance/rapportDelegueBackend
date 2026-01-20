@@ -29,7 +29,7 @@ export class CommuneController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: "Lister une commune" })
+  @ApiOperation({ summary: "Editer une commune" })
   @ApiBadRequestResponse({ description: "Erreur lors de la récupération d'une commune" })
   findOne(@Param('id') id: string) {
     return this.communeService.editerCommune(id);
