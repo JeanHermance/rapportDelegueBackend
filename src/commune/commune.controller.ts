@@ -1,15 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Query, UseGuards } from '@nestjs/common';
 import { CommuneService } from './commune.service';
 import { CreateCommuneDto } from './dto/create-commune.dto';
 import { UpdateCommuneDto } from './dto/update-commune.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBadRequestResponse, ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorator/role.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Role } from '../enum/role.enum';
 
 @Controller('commune')
 export class CommuneController {
   constructor(private readonly communeService: CommuneService) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('logoCommune'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: "Ajouter une commune" })
@@ -19,6 +25,7 @@ export class CommuneController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Lister les communes" })
   @ApiBadRequestResponse({ description: "Erreur lors de la récupération des communes" })
   @ApiQuery({ name: 'limit', required: false, type: Number })
@@ -29,6 +36,7 @@ export class CommuneController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Editer une commune" })
   @ApiBadRequestResponse({ description: "Erreur lors de la récupération d'une commune" })
   findOne(@Param('id') id: string) {
@@ -36,6 +44,8 @@ export class CommuneController {
   }
 
   @Patch('/modifier-statut/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Mise à jour du statut d'une commune" })
   @ApiBadRequestResponse({ description: "Erreur lors de la mise à jour du statut d'une commune" })
   updateStatus(@Param('id') id: string) {
@@ -43,6 +53,8 @@ export class CommuneController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Modifier une commune" })
   @ApiBadRequestResponse({ description: "Erreur lors de la modification d'une commune" })
   update(@Param('id') id: string, @Body() updateCommuneDto: UpdateCommuneDto) {
@@ -50,6 +62,8 @@ export class CommuneController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Supprimer une commune" })
   @ApiBadRequestResponse({ description: "Erreur lors de la suppression d'une commune" })
   remove(@Param('id') id: string) {
