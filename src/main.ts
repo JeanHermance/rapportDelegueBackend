@@ -13,9 +13,16 @@ async function bootstrap() {
 
   app.enableCors(
     {
-      origin: "*",
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:5000',
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://rapport-delegue-frontend.vercel.app'
+      ],
       credentials: true,
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      allowedHeaders: 'Content-Type,Authorization',
     }
   );
 
