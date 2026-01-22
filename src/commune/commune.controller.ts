@@ -43,6 +43,14 @@ export class CommuneController {
     return this.communeService.editerCommune(id);
   }
 
+  @Get('/fokotany/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Lister les fokotany d'une commune" })
+  @ApiBadRequestResponse({ description: "Erreur lors de la récupération des fokotany d'une commune" })
+  findAllFokotany(@Param('id') id: string) {
+    return this.communeService.fokotanyCommune(id);
+  }
+
   @Patch('/modifier-statut/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)

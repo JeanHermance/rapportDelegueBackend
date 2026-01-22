@@ -87,6 +87,22 @@ export class CommuneService {
     }
   }
 
+  async fokotanyCommune(id: string) {
+    try {
+      const commune = await this.communeRepository.findOne({ where: { idCommune: id }, relations: ['fokotanys'] });
+      if (!commune) {
+        throw new Error('Commune non trouvée');
+      }
+      return {
+        message: "Fokotany de la commune",
+        data: commune,
+        status: 200
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async editerCommune(id: string) {
     try {
       const commune = await this.communeRepository.findOne({ where: { idCommune: id }, relations: ['fokotanys'] });
