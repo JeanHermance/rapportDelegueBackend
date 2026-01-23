@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommuneModule } from './commune/commune.module';
 import { FokotanyModule } from './fokotany/fokotany.module';
 import { DelegueCommuneModule } from './delegue-commune/delegue-commune.module';
+import { RubriqueModule } from './rubrique/rubrique.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DelegueCommuneModule } from './delegue-commune/delegue-commune.module';
     CommuneModule,
     FokotanyModule,
     DelegueCommuneModule,
+    RubriqueModule,
   ],
   controllers: [AppController],
   providers: [AppService],
