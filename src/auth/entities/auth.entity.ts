@@ -2,6 +2,7 @@ import { DelegueCommune } from "src/delegue-commune/entities/delegue-commune.ent
 import { Role } from "../../enum/role.enum";
 import { StatutUtilisateur } from "../../enum/statututilisateur.enum";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Activite } from "src/activite/entities/activite.entity";
 
 @Entity('utilisateur')
 export class Auth {
@@ -58,5 +59,8 @@ export class Auth {
 
     @OneToMany(()=> DelegueCommune, (delegueCommune)=> delegueCommune.utilisateur)
     delegueCommunes: DelegueCommune[];
+
+    @OneToMany(()=> Activite, (activite)=> activite.auth)
+    activites: Activite[];
 
 }

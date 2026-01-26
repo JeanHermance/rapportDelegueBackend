@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Activite } from "src/activite/entities/activite.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('Rubrique')
 export class Rubrique {
@@ -16,4 +17,7 @@ export class Rubrique {
 
     @UpdateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP',onUpdate: 'CURRENT_TIMESTAMP'})
     updatedAt: Date;
+
+    @OneToMany(() => Activite, (activite) => activite.rubrique)
+    activites: Activite[];
 }
