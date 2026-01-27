@@ -45,6 +45,12 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix('servicedelegue');
 
+  // Only call listen if not running as a serverless function
+  if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    const port = process.env.PORT ?? 3000;
+    await app.listen(port);
+    console.log(`Application is running on: http://localhost:${port}`);
+  }
 
   await app.init();
 
