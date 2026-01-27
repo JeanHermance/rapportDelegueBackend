@@ -37,6 +37,7 @@ export class RubriqueService {
           {nomRubrique: Like(`%${search}%`)},
           {descriptionRubrique: Like(`%${search}%`)},
         ],
+        relations: ['activites'],
         take: limit,
         skip: (page - 1) * limit,
       })
@@ -58,7 +59,7 @@ export class RubriqueService {
 
   async editerRubrique(id: string) {
     try {
-      const rubrique = await this.rubriqueRepository.findOne({where: {idRubrique: id}})
+      const rubrique = await this.rubriqueRepository.findOne({where: {idRubrique: id},relations: ['activites','activites.observations','activites.observations.pieceJointes']})
       if(!rubrique){
         throw new Error('Rubrique non trouvée')
       }

@@ -65,7 +65,7 @@ export class ActiviteService {
           {auth: {email: Like(`%${search}%`)}},
           {rubrique: {idRubrique: idRubrique}}
         ],
-        relations: ['rubrique', 'auth'],
+        relations: ['rubrique', 'auth','observations','observations.pieceJointes'],
         take: limit,
         skip: (page - 1) * limit
       });
@@ -105,7 +105,7 @@ export class ActiviteService {
           {auth: {idUtilisateur: idUtilisateur}},
           {rubrique: {idRubrique: idRubrique}}
         ],
-        relations: ['rubrique', 'auth']
+        relations: ['rubrique','observations','observations.pieceJointes']
       });
 
       return {
@@ -121,7 +121,7 @@ export class ActiviteService {
 
   async editerActivite(id: string) {
     try {
-      const activite = await this.activiteRepository.findOne({ where: { idActivite: id }, relations: ['rubrique', 'auth'] });
+      const activite = await this.activiteRepository.findOne({ where: { idActivite: id }, relations: ['rubrique','auth','observations','observations.pieceJointes'] });
       if (!activite) {
         throw new Error('Activite non trouvee');
       }
@@ -133,7 +133,7 @@ export class ActiviteService {
 
   async miseAJourActivite(id: string, updateActiviteDto: UpdateActiviteDto) {
     try {
-      const activite = await this.activiteRepository.findOne({ where: { idActivite: id }, relations: ['rubrique', 'auth'] });
+      const activite = await this.activiteRepository.findOne({ where: { idActivite: id }});
       if (!activite) {
         throw new Error('Activite non trouvee');
       }

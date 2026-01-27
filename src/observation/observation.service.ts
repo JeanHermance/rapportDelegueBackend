@@ -44,6 +44,7 @@ export class ObservationService {
           {activite: {idActivite: idActivite}},
           {description: Like(`%${search}%`)}
         ],
+        relations: ['activite','pieceJointes'],
         take: limit,
         skip: (page - 1) * limit
       })
@@ -64,7 +65,7 @@ export class ObservationService {
 
   async editerObservation(id: string) {
     try {
-      const observation = await this.observationRepository.findOne({ where: { idObservation: id } })
+      const observation = await this.observationRepository.findOne({ where: { idObservation: id }, relations: ['activite','pieceJointes'] })
       if (!observation) {
         throw new Error('Observation non trouvée')
       }

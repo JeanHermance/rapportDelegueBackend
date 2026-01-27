@@ -139,8 +139,9 @@ export class CommuneService {
       if (!commune) {
         throw new Error('Commune non trouvée');
       }
-      const publicId = this.cloudinaryService.extractPublicIdFromUrl(commune.logoCommune);
-      if (publicId) {
+      const filename = commune.logoCommune.split('/').pop();
+      if (filename) {
+        const publicId = filename.split('.')[0];
         await this.cloudinaryService.deleteFile(publicId);
       }
       const communeSupprime = await this.communeRepository.remove(commune);

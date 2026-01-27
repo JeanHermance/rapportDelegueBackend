@@ -62,27 +62,5 @@ export class CloudinaryService {
             });
         });
     }
-
-    extractPublicIdFromUrl(url: string): string {
-        const splitUrl = url.split('/');
-        const filenameWithExtension = splitUrl.pop();
-        if (!filenameWithExtension) return '';
-
-        const filename = filenameWithExtension.split('.')[0];
-
-        // Find the index of "upload" to determine the start of the path
-        const uploadIndex = splitUrl.indexOf('upload');
-        if (uploadIndex === -1) return filename;
-
-        // The folder path starts after "upload" and the version segment (e.g., v123456)
-        // Check if the next segment is a version number (v + numbers)
-        let pathStartIndex = uploadIndex + 1;
-        if (splitUrl[pathStartIndex] && splitUrl[pathStartIndex].match(/^v\d+$/)) {
-            pathStartIndex++;
-        }
-
-        const folderPath = splitUrl.slice(pathStartIndex).join('/');
-        return folderPath ? `${folderPath}/${filename}` : filename;
-    }
 }
 

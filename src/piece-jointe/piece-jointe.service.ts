@@ -95,10 +95,12 @@ export class PieceJointeService {
       if (!pieceJointe) {
         throw new Error('Piece Jointe non trouvée')
       }
-      const publicId = this.cloudinaryService.extractPublicIdFromUrl(pieceJointe.urlPieceJointe);
-      if (publicId) {
-        await this.cloudinaryService.deleteFile(publicId);
+      const fileName = pieceJointe.urlPieceJointe.split('/').pop();
+      if (!fileName) {
+        throw new BadRequestException('URL invalide pour la pièce jointe');
       }
+      const publicId = fileName.split('.')[0];
+      await this.cloudinaryService.deleteFile(publicId);
 
       const pieceJointeDelete = await this.piecejointeRepository.remove(pieceJointe);
       return {
