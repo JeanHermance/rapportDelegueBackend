@@ -1,49 +1,67 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import * as express from 'express';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.setGlobalPrefix('servicedelegue');
 
-  //  CORS MANUEL (OBLIGATOIRE SUR VERCEL)
-  app.use((req, res, next) => {
-    const allowedOrigins = [
+  // Configuration CORS
+  app.enableCors({
+    origin: [
       'http://localhost:3000',
       'http://localhost:5000',
       'http://localhost:5173',
       'http://localhost:5174',
-      'https://prefecture-de-morondava.vercel.app',
-    ];
-
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET,POST,PUT,PATCH,DELETE,OPTIONS',
-    );
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Authorization',
-    );
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-    if (req.method === 'OPTIONS') {
-      return res.status(204).send();
-    }
-
-    next();
+      'https://prefecture-de-morondava.vercel.app'
+    ],
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
   });
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.setGlobalPrefix('servicedelegue');
+  // Configuration Swagger
+  const config = new DocumentBuilder()
+    .setTitle('Service des Delegué API')
+    .setDescription('rapport des activité des delegue')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document, {
+    useGlobalPrefix: true,
+    swaggerOptions: {
+      persistAuthorization: true,
+      customSiteTitle: 'Service des Delegué API',
+    },
+    customCssUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js',
+    ],
+  });
+
+  // Static assets
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/public',
+  });
+
+  // Doc JSON endpoint
+  app.getHttpAdapter().get('/servicedelegue/doc-json', (req: any, res: any) => {
+    res.json(document);
+  });
+
+  // Redirect root to Swagger
+  app.getHttpAdapter().get('/', (req: any, res: any) => {
+    res.redirect('/servicedelegue/api');
+  });
 
   // Only call listen if not running as a serverless function
   if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
@@ -53,8 +71,6 @@ async function bootstrap() {
   }
 
   await app.init();
-
-  // (handler Vercel)
   return app.getHttpAdapter().getInstance();
 }
 
