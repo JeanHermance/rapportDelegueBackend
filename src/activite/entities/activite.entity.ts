@@ -14,6 +14,9 @@ export class Activite {
     @Column()
     titre: string;
 
+    @Column({type: 'boolean',default: false})
+    statut: boolean;
+
     @CreateDateColumn({type: 'timestamp',default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 

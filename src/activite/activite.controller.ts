@@ -31,8 +31,9 @@ export class ActiviteController {
   @ApiBadRequestResponse({description: "Erreur lors de la listage des activites d'un utilisateur"})
   @ApiQuery({name: 'idUtilisateur', required: true, type: String})
   @ApiQuery({name: 'idRubrique', required: false, type: String, default: ''})
-  listActiviteUtilisateur(@Query("idUtilisateur") idUtilisateur: string, @Query("idRubrique") idRubrique: string) {
-    return this.activiteService.listActiviteUtilisateur(idUtilisateur, idRubrique);
+  @ApiQuery({name: 'statut', required: false, type: Boolean})
+  listActiviteUtilisateur(@Query("idUtilisateur") idUtilisateur: string, @Query("idRubrique") idRubrique: string, @Query("statut") statut: boolean) {
+    return this.activiteService.listActiviteUtilisateur(idUtilisateur, idRubrique, statut);
   }
 
   @Get(':id')
