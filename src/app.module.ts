@@ -9,6 +9,7 @@ import { FokotanyModule } from './fokotany/fokotany.module';
 import { DelegueCommuneModule } from './delegue-commune/delegue-commune.module';
 import { RubriqueModule } from './rubrique/rubrique.module';
 import { ActiviteModule } from './activite/activite.module';
+import { ObservationModule } from './observation/observation.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ActiviteModule } from './activite/activite.module';
     DelegueCommuneModule,
     RubriqueModule,
     ActiviteModule,
+    ObservationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

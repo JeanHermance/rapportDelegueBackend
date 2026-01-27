@@ -18,7 +18,7 @@ async function bootstrap() {
         'http://localhost:5000',
         'http://localhost:5173',
         'http://localhost:5174',
-        'https://rapport-delegue-frontend.vercel.app'
+        'https://prefecture-de-morondava.vercel.app'
       ],
       credentials: true,
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

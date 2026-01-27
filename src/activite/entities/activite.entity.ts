@@ -1,6 +1,7 @@
 import { Auth } from "src/auth/entities/auth.entity";
+import { Observation } from "src/observation/entities/observation.entity";
 import { Rubrique } from "src/rubrique/entities/rubrique.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Activite {
@@ -20,8 +21,13 @@ export class Activite {
     updatedAt: Date;
 
     @ManyToOne( () => Rubrique, (rubrique) => rubrique.activites)
+    @JoinColumn({ name: 'idRubrique' })
     rubrique: Rubrique;
 
     @ManyToOne(() => Auth, (auth) => auth.activites)
+    @JoinColumn({ name: 'idAuth' })
     auth: Auth;
+
+    @OneToMany(() => Observation,(observation) => observation.activite)
+    observations: Observation[];
 }

@@ -1,5 +1,5 @@
 import { Commune } from "src/commune/entities/commune.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('Fokotany')
 export class Fokotany {
@@ -25,5 +25,6 @@ export class Fokotany {
     updatedAt: Date;
 
     @ManyToOne(() => Commune, (commune) => commune.fokotanys)
+    @JoinColumn({ name: 'idCommune' })
     commune: Commune;
 }
