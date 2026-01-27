@@ -1,5 +1,6 @@
 import { Activite } from "src/activite/entities/activite.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { PieceJointe } from "src/piece-jointe/entities/piece-jointe.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Observation')
 export class Observation {
@@ -12,4 +13,7 @@ export class Observation {
     @ManyToOne(() => Activite, (activite) => activite.observations)
     @JoinColumn({ name: 'idActivite' })
     activite: Activite;
+
+    @OneToMany(() => PieceJointe, (pieceJointe) => pieceJointe.observation)
+    pieceJointes: PieceJointe[]
 }

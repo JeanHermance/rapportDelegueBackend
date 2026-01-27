@@ -12,19 +12,77 @@ export class CloudinaryService {
         });
     }
 
-    async uploadImage(file: Express.Multer.File): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    // IMAGES UNIQUEMENT
+    async uploadImage(file: Express.Multer.File): Promise<UploadApiResponse> {
         return new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream(
                 {
-                    folder: 'uploads',
+                    folder: 'uploads/images',
                     resource_type: 'image',
+                    use_filename: true,
+                    unique_filename: true,
                 },
                 (error, result) => {
                     if (error) return reject(error);
-                    if (!result) return reject(new Error('Cloudinary upload result is undefined'));
+                    if (!result) return reject(new Error('Cloudinary upload failed'));
                     resolve(result);
                 },
             ).end(file.buffer);
         });
     }
+
+    //  PDF / EXCEL / ZIP / DOC
+    async uploadFile(file: Express.Multer.File): Promise<UploadApiResponse> {
+        return new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream(
+                {
+                    folder: 'uploads/files',
+                    resource_type: 'raw',
+                    use_filename: true,
+                    unique_filename: true,
+                },
+                (error, result) => {
+                    if (error) {
+                        console.error('Cloudinary Upload Error:', error);
+                        return reject(error);
+                    }
+                    console.log('Cloudinary Upload Result:', result);
+                    if (!result) return reject(new Error('Cloudinary upload failed'));
+                    resolve(result);
+                },
+            ).end(file.buffer);
+        });
+    }
+
+    async deleteFile(publicId: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            cloudinary.uploader.destroy(publicId, (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            });
+        });
+    }
+
+    extractPublicIdFromUrl(url: string): string {
+        const splitUrl = url.split('/');
+        const filenameWithExtension = splitUrl.pop();
+        if (!filenameWithExtension) return '';
+
+        const filename = filenameWithExtension.split('.')[0];
+
+        // Find the index of "upload" to determine the start of the path
+        const uploadIndex = splitUrl.indexOf('upload');
+        if (uploadIndex === -1) return filename;
+
+        // The folder path starts after "upload" and the version segment (e.g., v123456)
+        // Check if the next segment is a version number (v + numbers)
+        let pathStartIndex = uploadIndex + 1;
+        if (splitUrl[pathStartIndex] && splitUrl[pathStartIndex].match(/^v\d+$/)) {
+            pathStartIndex++;
+        }
+
+        const folderPath = splitUrl.slice(pathStartIndex).join('/');
+        return folderPath ? `${folderPath}/${filename}` : filename;
+    }
 }
+

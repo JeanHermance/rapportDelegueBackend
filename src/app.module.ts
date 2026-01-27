@@ -10,6 +10,7 @@ import { DelegueCommuneModule } from './delegue-commune/delegue-commune.module';
 import { RubriqueModule } from './rubrique/rubrique.module';
 import { ActiviteModule } from './activite/activite.module';
 import { ObservationModule } from './observation/observation.module';
+import { PieceJointeModule } from './piece-jointe/piece-jointe.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ObservationModule } from './observation/observation.module';
     RubriqueModule,
     ActiviteModule,
     ObservationModule,
+    PieceJointeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
