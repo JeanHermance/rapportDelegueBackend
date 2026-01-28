@@ -143,10 +143,12 @@ export class ActiviteService {
 
   async miseAJourActivite(id: string, updateActiviteDto: UpdateActiviteDto) {
     try {
-      const activite = await this.activiteRepository.findOne({ where: { idActivite: id } });
+      const activite = await this.activiteRepository.findOne({ where: { idActivite: id } ,relations: ['auth']});
       if (!activite) {
         throw new Error('Activite non trouvee');
       }
+
+      console.log(activite.auth.idUtilisateur, updateActiviteDto.idUtilisateur);
 
       if (activite.auth.idUtilisateur !== updateActiviteDto.idUtilisateur) {
         throw new Error('Vous n\'avez pas le droit de modifier cette activite');
