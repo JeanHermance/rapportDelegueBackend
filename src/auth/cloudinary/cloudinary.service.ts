@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary, UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 import { ConfigService } from '@nestjs/config';
+import { extname } from 'path';
 
 @Injectable()
 export class CloudinaryService {
@@ -33,13 +34,20 @@ export class CloudinaryService {
 
     //  PDF / EXCEL / ZIP / DOC
     async uploadFile(file: Express.Multer.File): Promise<UploadApiResponse> {
+        const extension = extname(file.originalname);
+        const nameOnly = file.originalname.replace(extension, '');
+        const safeName = nameOnly
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^\w.-]/g, '');
+
         return new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream(
                 {
                     folder: 'uploads/files',
                     resource_type: 'raw',
-                    use_filename: true,
-                    unique_filename: true,
+                    public_id: `${safeName}-${Date.now()}${extension}`,
                 },
                 (error, result) => {
                     if (error) {

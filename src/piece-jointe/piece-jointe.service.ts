@@ -1,4 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Readable } from 'stream';
 import { CreatePieceJointeDto } from './dto/create-piece-jointe.dto';
 import { UpdatePieceJointeDto } from './dto/update-piece-jointe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -110,6 +111,36 @@ export class PieceJointeService {
       }
     } catch (error) {
       throw new BadRequestException(error.message)
+    }
+  }
+  async download(id: string) {
+    const pieceJointe = await this.piecejointeRepository.findOne({ where: { idPieceJointe: id } });
+
+    if (!pieceJointe) throw new NotFoundException(`Pièce jointe introuvable`);
+
+    try {
+      const response = await fetch(pieceJointe.urlPieceJointe);
+
+      if (!response.ok) {
+        throw new Error(`Erreur lors de la récupération : ${response.statusText}`);
+      }
+
+      if (!response.body) {
+        throw new Error("Le flux de données du cloud est vide");
+      }
+
+      // @ts-ignore
+      const nodeStream = Readable.fromWeb(response.body);
+
+      return {
+        stream: nodeStream,
+        typePieceJointe: pieceJointe.typePieceJointe,
+        nomPieceJointe: pieceJointe.nomPieceJointe,
+        taillePieceJointe: pieceJointe.taillePieceJointe,
+      };
+    } catch (error) {
+      console.error('Erreur Fetch Cloudinary:', error.message);
+      throw new BadRequestException("Impossible de récupérer le fichier sur le cloud");
     }
   }
 }
